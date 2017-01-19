@@ -87,8 +87,7 @@ app.controller('editCtrl', function ($scope, $rootScope, $location, $routeParams
     };
 });
 
-app.config(['$routeProvider', '$locationProvider',
-  function($routeProvider, $locationProvider) {
+app.config(function($routeProvider, $locationProvider) {
       
     $routeProvider.
       when('/', {
@@ -115,9 +114,15 @@ app.config(['$routeProvider', '$locationProvider',
       .otherwise({
         redirectTo: '/'
       });
+      if (window.history && window.history.pushState) {
+          $locationProvider.html5Mode({
+              enabled : true,
+              requireBase : false
+          }).hashPrefix('');
+      }
     // use the HTML5 History API
-    $locationProvider.html5Mode(true);
-}]);
+    
+});
 app.run(['$location', '$rootScope', function($location, $rootScope) {
     $rootScope.$on('$routeChangeSuccess', function (event, current, previous) {
         $rootScope.title = current.$$route.title;
